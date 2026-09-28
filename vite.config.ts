@@ -7,9 +7,9 @@ import { defineConfig } from 'vite';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
   return {
-    base: './',
+    base: process.env.VITE_BASE_URL || (mode === 'development' ? '/' : '/get-it-write/'),
     plugins: [
       react(), 
       tailwindcss()
