@@ -2,14 +2,16 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   BookOpen, Clock, Calendar, Search, ArrowRight, 
   ArrowUpRight, X, Check, Share2, Tag, Terminal,
-  Sparkles, MessageSquare, ChevronRight, FileText,
-  Zap, Layers, BarChart2
+  MessageSquare, ChevronRight, FileText,
+  Layers, BarChart2
 } from 'lucide-react';
 import { INSIGHT_ARTICLES, INSIGHT_CATEGORIES, InsightArticle } from '../data/insightsData';
 import { AGENCY_INFO } from '../data/portfolioData';
+import { InsightsGridSkeleton } from './Skeletons';
 
 interface InsightsSectionProps {
   onScheduleConsultation?: (topic: string) => void;
+  initialLoading?: boolean;
 }
 
 export type ReadDurationFilter = 'all' | 'quick' | 'deep';
@@ -67,15 +69,55 @@ export const calculateReadStats = (article: InsightArticle): ReadStats => {
   };
 };
 
-export const InsightsSection: React.FC<InsightsSectionProps> = ({ onScheduleConsultation }) => {
+export const InsightsSection: React.FC<InsightsSectionProps> = ({ 
+  onScheduleConsultation,
+  initialLoading = true
+}) => {
   const [activeCategory, setActiveCategory] = useState<string>('All Articles');
   const [durationFilter, setDurationFilter] = useState<ReadDurationFilter>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedArticle, setSelectedArticle] = useState<InsightArticle | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
   const [modalReadProgress, setModalReadProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(initialLoading);
 
   const modalContainerRef = useRef<HTMLDivElement>(null);
+
+  // Initial mount smooth skeleton
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleCategoryChange = (cat: string) => {
+    if (cat === activeCategory) return;
+    setIsLoading(true);
+    setActiveCategory(cat);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 280);
+  };
+
+  const handleDurationChange = (dur: ReadDurationFilter) => {
+    if (dur === durationFilter) return;
+    setIsLoading(true);
+    setDurationFilter(dur);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 250);
+  };
+
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    if (!isLoading) {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 200);
+    }
+  };
 
   // Reset modal scroll progress when article changes
   useEffect(() => {
@@ -171,8 +213,8 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({ onScheduleCons
               {INSIGHT_CATEGORIES.map((cat) => (
                 <button
                   key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
+                  onClick={() => handleCategoryChange(cat)}
+                  className={`px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer ${
                     activeCategory === cat
                       ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                       : 'text-slate-400 hover:text-slate-200'
@@ -189,7 +231,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({ onScheduleCons
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search topics, tech, or tags..."
                 className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors"
               />
@@ -203,8 +245,8 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({ onScheduleCons
               <span>Estimated Reading Time Filter:</span>
               <div className="inline-flex p-0.5 bg-slate-900/80 border border-slate-800 rounded-lg">
                 <button
-                  onClick={() => setDurationFilter('all')}
-                  className={`px-2.5 py-1 rounded-md transition-colors ${
+                  onClick={() => handleDurationChange('all')}
+                  className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
                     durationFilter === 'all'
                       ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30'
                       : 'text-slate-400 hover:text-slate-200'
@@ -213,20 +255,20 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({ onScheduleCons
                   All Lengths
                 </button>
                 <button
-                  onClick={() => setDurationFilter('quick')}
-                  className={`px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 ${
+                  onClick={() => handleDurationChange('quick')}
+                  className={`px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 cursor-pointer ${
                     durationFilter === 'quick'
                       ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
                   title="Articles taking 5 minutes or less to read"
                 >
-                  <Zap className="w-3 h-3 text-amber-400" />
+                  <Clock className="w-3 h-3 text-slate-400" />
                   <span>Quick Reads (≤ 5 min)</span>
                 </button>
                 <button
-                  onClick={() => setDurationFilter('deep')}
-                  className={`px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 ${
+                  onClick={() => handleDurationChange('deep')}
+                  className={`px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 cursor-pointer ${
                     durationFilter === 'deep'
                       ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30'
                       : 'text-slate-400 hover:text-slate-200'
@@ -246,8 +288,16 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({ onScheduleCons
 
         </div>
 
-        {/* Featured Spotlight Article (if available) */}
-        {featuredArticle && activeCategory === 'All Articles' && searchQuery === '' && durationFilter === 'all' && (() => {
+        {/* Articles Content or Skeleton */}
+        {isLoading ? (
+          <InsightsGridSkeleton 
+            showFeatured={activeCategory === 'All Articles' && searchQuery === '' && durationFilter === 'all'} 
+            count={6} 
+          />
+        ) : (
+          <>
+            {/* Featured Spotlight Article (if available) */}
+            {featuredArticle && activeCategory === 'All Articles' && searchQuery === '' && durationFilter === 'all' && (() => {
           const stats = calculateReadStats(featuredArticle);
           return (
             <div className="mb-12 rounded-3xl bg-slate-900/60 border border-slate-800/90 overflow-hidden hover:border-slate-700 transition-all duration-300 group shadow-xl">
@@ -265,8 +315,8 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({ onScheduleCons
                   
                   <div className="absolute top-4 left-4 flex items-center gap-2">
                     <span className="px-2.5 py-1 rounded-md bg-cyan-500 text-slate-950 font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1 shadow-md">
-                      <Sparkles className="w-3 h-3 fill-current" />
-                      <span>Featured Deep Dive</span>
+                      <BookOpen className="w-3 h-3" />
+                      <span>Featured Article</span>
                     </span>
                   </div>
 
@@ -456,6 +506,8 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({ onScheduleCons
             </button>
           </div>
         )}
+        </>
+        )}
 
         {/* Bottom Technical Newsletter / Inquiry Banner */}
         <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-stone-200 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
@@ -583,7 +635,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({ onScheduleCons
               {/* Key Takeaways Box */}
               <div className="p-4 sm:p-5 rounded-xl bg-slate-950/80 border border-cyan-900/40 mb-6">
                 <h4 className="text-xs font-mono text-cyan-400 uppercase tracking-wider mb-2.5 font-bold flex items-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Terminal className="w-3.5 h-3.5" />
                   <span>Executive Architectural Takeaways</span>
                 </h4>
                 <ul className="space-y-2">

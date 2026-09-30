@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
-  ArrowRight, ShieldCheck, Zap, TrendingUp, CheckCircle2, 
-  Sparkles, Code2, Globe2, PhoneCall, Laptop, Layers, 
+  ArrowRight, ShieldCheck, TrendingUp, CheckCircle2, 
+  Code2, Globe2, PhoneCall, Laptop, Layers, 
   ChevronRight, ShoppingCart, Search, Database, Cpu
 } from 'lucide-react';
 import { AGENCY_INFO } from '../data/portfolioData';
@@ -30,12 +30,12 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           {/* Left Column: Headline & Value Proposition */}
           <div className="lg:col-span-7 space-y-6">
             
-            {/* Official Logo Badge with Sprout Emblem */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 dark:bg-slate-900/80 border border-stone-200 dark:border-slate-800 text-xs font-mono font-medium shadow-xs backdrop-blur-md">
-              <SproutEmblem className="w-5 h-5 shrink-0" />
-              <span className="font-black text-slate-900 dark:text-white tracking-wider">DOMAINTECHHUB</span>
-              <span className="text-slate-300 dark:text-slate-700">·</span>
-              <span className="font-bold text-lime-600 dark:text-lime-400">INNOVATE · CONNECT · SUCCEED</span>
+            {/* Studio Identity Tag */}
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-600 dark:text-slate-400 tracking-wider uppercase font-medium">
+              <SproutEmblem className="w-4 h-4 shrink-0 text-teal-600" />
+              <span className="font-bold text-slate-900 dark:text-white">Domain Tech Hub</span>
+              <span>·</span>
+              <span>Nairobi Studio & Digital Engineering</span>
             </div>
 
             {/* Large Bold Headline with highlighted words in Teal */}
@@ -59,23 +59,22 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
                 onClick={() => onNavigate('calculator')}
-                className="flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-gradient-to-r from-blue-600 via-teal-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white font-bold text-sm shadow-lg shadow-teal-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-semibold text-sm shadow-md shadow-teal-600/20 transition-all active:scale-[0.98]"
               >
-                <span className="text-white font-bold">{t('hero.btnEstimate')}</span>
+                <span>{t('hero.btnEstimate')}</span>
                 <ArrowRight className="w-4 h-4 text-white" />
               </button>
 
               <button
                 onClick={() => onNavigate('audit')}
-                className="flex items-center gap-2 px-5 py-3.5 rounded-full bg-white dark:bg-slate-900 hover:bg-stone-50 dark:hover:bg-slate-800 text-slate-900 dark:text-white border border-stone-300 dark:border-slate-700 font-bold text-sm shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="flex items-center gap-2 px-5 py-3.5 rounded-full bg-white dark:bg-slate-900 hover:bg-stone-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-stone-300 dark:border-slate-700 font-semibold text-sm shadow-xs transition-all active:scale-[0.98]"
               >
-                <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
-                <span className="text-slate-900 dark:text-white font-bold">{t('hero.btnAudit')}</span>
+                <span>{t('hero.btnAudit')}</span>
               </button>
 
               <button
                 onClick={() => onNavigate('services')}
-                className="flex items-center gap-1.5 px-4 py-3.5 text-sm font-bold text-slate-800 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                className="flex items-center gap-1.5 px-4 py-3.5 text-sm font-semibold text-slate-800 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
               >
                 <span>{t('hero.btnServices')}</span>
                 <ChevronRight className="w-4 h-4" />
@@ -89,7 +88,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                   <AnimatedCounter value="48+" duration={2} />
                 </div>
                 <div className="text-xs text-slate-700 dark:text-slate-300 font-semibold mt-1">
-                  Projects Completed
+                  {t('hero.statProjects')}
                 </div>
               </div>
 
@@ -98,7 +97,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                   <AnimatedCounter value="35+" duration={2} />
                 </div>
                 <div className="text-xs text-slate-700 dark:text-slate-300 font-semibold mt-1">
-                  Kenyan & Global Clients
+                  {t('hero.statTurnaround')}
                 </div>
               </div>
 
@@ -107,16 +106,16 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                   <AnimatedCounter value="99.8%" duration={2} />
                 </div>
                 <div className="text-xs text-slate-700 dark:text-slate-300 font-semibold mt-1">
-                  Client Retention Rate
+                  {t('hero.statRetention')}
                 </div>
               </div>
 
               <div>
                 <div className="text-2xl sm:text-3xl font-extrabold font-mono tracking-tight text-amber-600 dark:text-amber-400">
-                  <AnimatedCounter value="4.6x" duration={2} />
+                  <AnimatedCounter value="98+" duration={2} />
                 </div>
                 <div className="text-xs text-slate-700 dark:text-slate-300 font-semibold mt-1">
-                  Average Pipeline ROI
+                  {t('hero.statScore')}
                 </div>
               </div>
             </div>

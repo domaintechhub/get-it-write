@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { 
   Globe, Search, CheckCircle, Server, Shield, 
-  ArrowRight, Sparkles, ExternalLink, HelpCircle 
+  ArrowRight, ExternalLink, HelpCircle 
 } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
+import { useLanguage } from '../context/LanguageContext';
 
 interface DomainCheckerProps {
   onSelectDomainForSetup: (domain: string, extension: string) => void;
@@ -30,6 +31,7 @@ export const DomainChecker: React.FC<DomainCheckerProps> = ({ onSelectDomainForS
   const [hasSearched, setHasSearched] = useState(false);
   const [activeTab, setActiveTab] = useState<'domains' | 'hosting'>('domains');
   const { formatPrice } = useCurrency();
+  const { t } = useLanguage();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,13 +49,13 @@ export const DomainChecker: React.FC<DomainCheckerProps> = ({ onSelectDomainForS
         {/* Section Header */}
         <div className="max-w-3xl mb-12">
           <div className="text-xs font-mono text-cyan-400 tracking-wider mb-2">
-            INFRASTRUCTURE · DOMAINS & CLOUD HOSTING
+            {t('domain.kicker')}
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-            Secure your digital address & high-speed cloud infrastructure.
+            {t('domain.title')}
           </h2>
           <p className="text-base sm:text-lg text-slate-300">
-            We handle everything from Kenyan `.co.ke` and global `.com` registrations to high-availability NVMe cloud servers, DNS security, and corporate email systems.
+            {t('domain.subtitle')}
           </p>
         </div>
 
@@ -61,23 +63,23 @@ export const DomainChecker: React.FC<DomainCheckerProps> = ({ onSelectDomainForS
         <div className="flex items-center gap-2 mb-8">
           <button
             onClick={() => setActiveTab('domains')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors ${
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
               activeTab === 'domains'
                 ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                 : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
             }`}
           >
-            Domain Name Lookup
+            {t('domain.lookupTab')}
           </button>
           <button
             onClick={() => setActiveTab('hosting')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors ${
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
               activeTab === 'hosting'
                 ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                 : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
             }`}
           >
-            Managed Cloud Hosting Plans
+            {t('domain.hostingTab')}
           </button>
         </div>
 
@@ -98,10 +100,10 @@ export const DomainChecker: React.FC<DomainCheckerProps> = ({ onSelectDomainForS
                 </div>
                 <button
                   type="submit"
-                  className="px-6 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+                  className="px-6 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
                 >
                   <Search className="w-4 h-4" />
-                  <span>Check Availability</span>
+                  <span>{t('domain.btnCheck')}</span>
                 </button>
               </form>
 

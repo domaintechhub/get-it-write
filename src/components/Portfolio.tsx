@@ -1,20 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ExternalLink, ArrowUpRight, TrendingUp, CheckCircle, 
   X, Layers, MapPin, Quote, Clock, Calendar 
 } from 'lucide-react';
 import { CASE_STUDIES } from '../data/portfolioData';
 import { CaseStudy } from '../types';
+import { useLanguage } from '../context/LanguageContext';
+import { PortfolioGridSkeleton } from './Skeletons';
 
 interface PortfolioProps {
   onBookSimilarProject: (projectTitle: string) => void;
+  initialLoading?: boolean;
 }
 
-export const Portfolio: React.FC<PortfolioProps> = ({ onBookSimilarProject }) => {
+export const Portfolio: React.FC<PortfolioProps> = ({ 
+  onBookSimilarProject,
+  initialLoading = true
+}) => {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [selectedCase, setSelectedCase] = useState<CaseStudy | null>(null);
+  const [isLoading, setIsLoading] = useState(initialLoading);
+  const { t } = useLanguage();
 
   const categories = ['All', 'E-Commerce', 'SEO & Marketing', 'CRM & Software', 'Web & Mobile', 'Branding & Design'];
+
+  // Initial smooth mount skeleton
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleCategoryChange = (cat: string) => {
+    if (cat === activeCategory) return;
+    setIsLoading(true);
+    setActiveCategory(cat);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 280);
+  };
 
   const filteredCases = activeCategory === 'All'
     ? CASE_STUDIES
@@ -27,13 +52,13 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onBookSimilarProject }) =>
         {/* Section Header */}
         <div className="max-w-3xl mb-12">
           <div className="text-xs font-mono text-cyan-400 tracking-wider mb-2">
-            PROVEN TRACK RECORD · CASE STUDIES
+            {t('port.kicker')}
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-            Transformative digital results for ambitious brands.
+            {t('port.title')}
           </h2>
           <p className="text-base sm:text-lg text-slate-300">
-            Explore how Domain Tech Hub delivers revenue acceleration, top Google rankings, and seamless operational workflows across Kenya and beyond.
+            {t('port.subtitle')}
           </p>
         </div>
 
@@ -42,8 +67,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onBookSimilarProject }) =>
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
+              onClick={() => handleCategoryChange(cat)}
+              className={`px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer ${
                 activeCategory === cat
                   ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                   : 'text-slate-400 hover:text-slate-200'
@@ -54,13 +79,16 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onBookSimilarProject }) =>
           ))}
         </div>
 
-        {/* Case Studies Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCases.map((item) => (
-            <div
-              key={item.id}
-              className="group bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-950/20"
-            >
+        {/* Case Studies Grid with Loading Skeleton */}
+        {isLoading ? (
+          <PortfolioGridSkeleton count={6} />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-200">
+            {filteredCases.map((item) => (
+              <div
+                key={item.id}
+                className="group bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-950/20"
+              >
               <div>
                 {/* Image Banner */}
                 <div className="relative h-48 w-full overflow-hidden bg-slate-950">
@@ -147,6 +175,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onBookSimilarProject }) =>
             </div>
           ))}
         </div>
+        )}
 
       </div>
 

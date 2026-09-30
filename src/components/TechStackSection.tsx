@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  Cpu, Layers, ShieldCheck, Zap, Search, 
+  Cpu, Layers, ShieldCheck, Gauge, Search, 
   ExternalLink, ArrowRight, CheckCircle2, Terminal 
 } from 'lucide-react';
 import { TECH_STACK, TECH_CATEGORIES, TechItem } from '../data/techStackData';
@@ -48,7 +48,7 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({ onSelectTech
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
           <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
             <div className="flex items-center gap-2 mb-1.5 text-cyan-400">
-              <Zap className="w-4 h-4" />
+              <Gauge className="w-4 h-4" />
               <span className="font-bold text-xs uppercase font-mono tracking-wider">Sub-Second LCP</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">

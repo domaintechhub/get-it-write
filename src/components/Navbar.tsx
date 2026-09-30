@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   ChevronDown, Globe, Layout, ShoppingCart, Search, Database, 
-  Cpu, MessageSquare, Calculator, Zap, Server, FolderGit2, 
-  HelpCircle, ArrowRight, ArrowUpRight, Menu, X, Sparkles,
+  Cpu, MessageSquare, Calculator, Gauge, Server, FolderGit2, 
+  HelpCircle, ArrowRight, ArrowUpRight, Menu, X, BookOpen,
   PhoneCall, ShieldCheck, Languages, Sun, Moon, SlidersHorizontal,
   Check, Layers, Award, Users
 } from 'lucide-react';
@@ -20,7 +20,6 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpenSearch }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Dropdown states
@@ -28,15 +27,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
+  const [langToast, setLangToast] = useState<string | null>(null);
 
   const { currency, setCurrency } = useCurrency();
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage, t, languageOptions } = useLanguage();
   const { theme, toggleTheme } = useTheme();
 
   const servicesDropdownRef = useRef<HTMLDivElement>(null);
   const toolsDropdownRef = useRef<HTMLDivElement>(null);
   const moreDropdownRef = useRef<HTMLDivElement>(null);
   const preferencesRef = useRef<HTMLDivElement>(null);
+
+  const handleSelectLanguage = (code: Language) => {
+    setLanguage(code);
+    const opt = languageOptions.find(o => o.code === code);
+    const msg = opt ? `${opt.name} (${opt.code})` : code;
+    setLangToast(msg);
+    setTimeout(() => setLangToast(null), 2500);
+  };
 
   const servicesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const toolsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -99,12 +107,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setIsScrolled(scrollY > 20);
-
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalHeight > 0) {
-        const progress = (scrollY / totalHeight) * 100;
-        setScrollProgress(Math.min(100, Math.max(0, progress)));
-      }
     };
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -167,21 +169,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
 
   return (
     <>
-      {/* Topmost Page Scroll Progress Indicator Bar */}
-      <div 
-        className="fixed top-0 left-0 right-0 h-[3px] bg-stone-200/60 dark:bg-slate-900/60 z-[60] pointer-events-none"
-        role="progressbar"
-        aria-valuenow={Math.round(scrollProgress)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label="Reading & Page Scroll Progress"
-      >
-        <div 
-          className="h-full bg-gradient-to-r from-teal-500 via-emerald-500 to-blue-600 shadow-[0_0_10px_rgba(20,184,166,0.8)] transition-[width] duration-150 ease-out"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
-
       <header 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
@@ -420,8 +407,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                         onClick={() => handleNavClick('audit')}
                         className="w-full text-left p-2.5 rounded-2xl hover:bg-stone-50 dark:hover:bg-slate-900 transition-colors group flex items-start gap-3 cursor-pointer"
                       >
-                        <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform">
-                          <Zap className="w-4 h-4" />
+                        <div className="w-8 h-8 rounded-xl bg-teal-50 dark:bg-teal-950/60 border border-teal-200 dark:border-teal-800 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform">
+                          <Gauge className="w-4 h-4" />
                         </div>
                         <div>
                           <div className="text-xs font-semibold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors flex items-center gap-1.5">
@@ -533,7 +520,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                         }`}
                       >
                         <div className="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform">
-                          <Sparkles className="w-4 h-4" />
+                          <BookOpen className="w-4 h-4" />
                         </div>
                         <div>
                           <div className="text-xs font-semibold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">
@@ -624,7 +611,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
               </button>
             </nav>
 
-            {/* 3. Header Action: Unified Burger Menu Button (Houses Search, Theme, Language/Currency, Direct Contacts & Utilities) */}
+            {/* 3. Header Action: Unified Burger Menu Button */}
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
@@ -637,12 +624,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                 {mobileMenuOpen ? (
                   <>
                     <X className="w-5 h-5 text-teal-600 dark:text-teal-400 group-hover:rotate-90 transition-transform" />
-                    <span className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300">Close</span>
+                    <span className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300">{t('menu.close')}</span>
                   </>
                 ) : (
                   <>
                     <Menu className="w-5 h-5 text-teal-600 dark:text-teal-400 group-hover:scale-110 transition-transform" />
-                    <span className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300">Menu</span>
+                    <span className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300">{t('menu.menu')}</span>
                   </>
                 )}
               </button>
@@ -665,7 +652,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                 className="w-full flex items-center gap-2.5 p-3 rounded-2xl bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-stone-200 dark:border-slate-800 text-slate-500 text-xs text-left hover:border-teal-400 dark:hover:border-teal-600 transition-colors cursor-pointer group"
               >
                 <Search className="w-4 h-4 text-teal-600 group-hover:scale-110 transition-transform" />
-                <span className="text-slate-600 dark:text-slate-300">Search services, case studies, utilities, guides...</span>
+                <span className="text-slate-600 dark:text-slate-300">{t('menu.searchPlaceholder')}</span>
                 <kbd className="ml-auto text-[10px] font-mono px-2 py-0.5 bg-white dark:bg-slate-800 border rounded shadow-xs">⌘K</kbd>
               </button>
 
@@ -675,14 +662,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                 className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs text-center shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.99]"
               >
                 <PhoneCall className="w-4 h-4" />
-                <span>Contact Us (Book Free Strategy Session)</span>
+                <span>{t('menu.contactCta')}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
               {/* Primary 5 Important Menu Sections (Shown on mobile & tablet where centered nav is hidden) */}
               <div className="xl:hidden space-y-1">
                 <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 px-2 pt-1">
-                  Main Navigation
+                  {t('menu.mainNav')}
                 </div>
                 <div className="bg-stone-50/80 dark:bg-slate-900/40 backdrop-blur-md border border-stone-200 dark:border-slate-800 rounded-2xl overflow-hidden divide-y divide-stone-200/80 dark:divide-slate-800/60">
                   {[
@@ -726,12 +713,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
               {/* Additional Solutions & Resources Grid */}
               <div className="space-y-1">
                 <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 px-2 pt-1">
-                  Solutions & Platforms
+                  {t('menu.solutions')}
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {[
                     { id: 'tech-stack', label: t('nav.techStack'), subtitle: 'React, Node, Python & Cloud Architecture', icon: Cpu, active: isTechStackActive },
-                    { id: 'insights', label: t('nav.insights'), subtitle: 'Tech Trends & Strategy Guides', icon: Sparkles, active: isInsightsActive },
+                    { id: 'insights', label: t('nav.insights'), subtitle: 'Tech Trends & Strategy Guides', icon: BookOpen, active: isInsightsActive },
                     { id: 'client-portal', label: t('nav.clientPortal'), subtitle: 'Client Project Dashboard Demo', icon: ShieldCheck, active: isPortalActive },
                     { id: 'faq', label: t('nav.faq'), subtitle: 'Frequently Asked Questions & SLAs', icon: HelpCircle, active: isFaqActive }
                   ].map((item) => {
@@ -762,30 +749,44 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
               {/* Preferences & Utilities: Theme, Currency, Language */}
               <div className="p-4 rounded-2xl bg-stone-50/90 dark:bg-slate-900/60 border border-stone-200 dark:border-slate-800 space-y-3">
                 <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
-                  Preferences & Localization
+                  {t('menu.preferences')}
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {/* Language */}
                   <div className="space-y-1">
-                    <span className="text-[11px] font-mono text-slate-500 flex items-center gap-1">
-                      <Languages className="w-3 h-3 text-teal-600" />
-                      <span>Language</span>
-                    </span>
-                    <div className="grid grid-cols-3 gap-1 font-mono text-xs">
-                      {(['EN', 'FR', 'SW'] as Language[]).map((lang) => (
-                        <button
-                          key={lang}
-                          onClick={() => setLanguage(lang)}
-                          className={`py-1.5 rounded-xl text-center transition-colors cursor-pointer ${
-                            language === lang 
-                              ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200 dark:bg-teal-950 dark:text-teal-300 dark:border-teal-800' 
-                              : 'text-slate-600 bg-white dark:bg-slate-950 border border-stone-200 dark:border-slate-800'
-                          }`}
-                        >
-                          {lang}
-                        </button>
-                      ))}
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-mono text-slate-500 flex items-center gap-1">
+                        <Languages className="w-3 h-3 text-teal-600" />
+                        <span>{t('menu.language')}</span>
+                      </span>
+                      <span className="text-[10px] font-mono font-bold text-teal-600 dark:text-teal-400">
+                        {language}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1.5 font-mono text-xs">
+                      {languageOptions.map((opt) => {
+                        const isSelected = language === opt.code;
+                        return (
+                          <button
+                            type="button"
+                            key={opt.code}
+                            onClick={() => handleSelectLanguage(opt.code)}
+                            className={`py-2 px-1.5 rounded-xl text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
+                              isSelected 
+                                ? 'bg-teal-700 dark:bg-teal-600 text-white font-semibold shadow-xs border border-teal-800 dark:border-teal-500' 
+                                : 'text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-950 border border-stone-200 dark:border-slate-800 hover:border-teal-300 dark:hover:border-slate-700'
+                            }`}
+                            aria-pressed={isSelected}
+                            title={`Select ${opt.name}`}
+                          >
+                            <span className="text-xs font-bold tracking-wider leading-none">{opt.code}</span>
+                            <span className={`text-[10px] leading-tight ${isSelected ? 'text-teal-100 font-medium' : 'text-slate-500 dark:text-slate-400'}`}>
+                              {opt.name}
+                            </span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -793,7 +794,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                   <div className="space-y-1">
                     <span className="text-[11px] font-mono text-slate-500 flex items-center gap-1">
                       <span className="font-bold text-teal-600">$</span>
-                      <span>Currency</span>
+                      <span>{t('menu.currency')}</span>
                     </span>
                     <div className="grid grid-cols-2 gap-1 font-mono text-xs">
                       {(['USD', 'KES'] as const).map((curr) => (
@@ -816,7 +817,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                   <div className="space-y-1">
                     <span className="text-[11px] font-mono text-slate-500 flex items-center gap-1">
                       <Sun className="w-3 h-3 text-amber-500" />
-                      <span>Theme Mode</span>
+                      <span>{t('menu.theme')}</span>
                     </span>
                     <div className="grid grid-cols-2 gap-1 font-mono text-xs">
                       <button
@@ -871,6 +872,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
           </div>
         )}
       </header>
+
+      {/* Floating Language Change Confirmation Toast */}
+      {langToast && (
+        <div className="fixed top-20 right-4 sm:right-8 z-[70] animate-in fade-in slide-in-from-top-3 duration-200 pointer-events-none">
+          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-slate-900/95 text-white border border-teal-500/50 shadow-2xl backdrop-blur-xl text-xs font-mono">
+            <div className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-ping" />
+            <span className="font-semibold text-teal-300">{langToast}</span>
+          </div>
+        </div>
+      )}
     </>
   );
 };

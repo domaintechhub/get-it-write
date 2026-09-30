@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { 
   Globe, Layout, ShoppingCart, FileCode, Search, TrendingUp, Target, 
   MessageSquare, Share2, Database, Cpu, Compass, ShieldCheck, Palette, 
-  Smartphone, ArrowRight, ArrowLeft, Check, Sparkles, Clock, 
-  CheckCircle2, Plus, Zap, HelpCircle, ChevronDown, ChevronRight,
+  Smartphone, ArrowRight, ArrowLeft, Check, Clock, 
+  CheckCircle2, Plus, HelpCircle, ChevronDown, ChevronRight,
   ExternalLink, Layers
 } from 'lucide-react';
 import { ServiceDetail, ServiceCategory } from '../types';

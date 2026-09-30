@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calculator, Zap, Server, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Calculator, Gauge, Server, CheckCircle2, ArrowRight } from 'lucide-react';
 import { PageHeader } from './PageHeader';
 import { CostCalculator } from './CostCalculator';
 import { SeoAuditTool } from './SeoAuditTool';
@@ -49,7 +49,7 @@ export const ToolsPage: React.FC<ToolsPageProps> = ({
       id: 'audit' as ToolTab,
       label: 'Core Web Vitals & SEO Scanner',
       shortLabel: 'Performance Scanner',
-      icon: Zap,
+      icon: Gauge,
       description: 'Run diagnostic health checks on speed, mobile responsiveness, and SEO tags.'
     },
     {
@@ -65,7 +65,6 @@ export const ToolsPage: React.FC<ToolsPageProps> = ({
     <div className="min-h-screen bg-[#faf8f5] dark:bg-slate-950 text-slate-900 dark:text-slate-100">
       <PageHeader
         badge="Developer & Client Tools"
-        badgeIcon={<Sparkles className="w-3.5 h-3.5 text-teal-600 dark:text-cyan-400" />}
         title="Interactive Engineering Tools & Estimators"
         description="Instant diagnostic utilities, scope planning calculators, and infrastructure checkers created by Domain Tech Hub to provide complete transparency before you write a single line of code."
         currentBreadcrumb="Developer & Client Tools"

@@ -1,28 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Globe, Layout, ShoppingCart, FileCode, Search, TrendingUp, Target, 
   MessageSquare, Share2, Database, Cpu, Compass, ShieldCheck, Palette, 
-  Smartphone, ArrowRight, Check, X, Clock, Layers, Sparkles
+  Smartphone, ArrowRight, Check, X, Clock, Layers
 } from 'lucide-react';
 import { SERVICES_LIST, CATEGORIES_CONFIG } from '../data/servicesData';
 import { ServiceDetail, ServiceCategory } from '../types';
 import { useCurrency } from '../context/CurrencyContext';
+import { useLanguage } from '../context/LanguageContext';
+import { ServicesGridSkeleton } from './Skeletons';
 
 interface ServicesExplorerProps {
   onSelectForQuote: (serviceId: string) => void;
   onBookService: (serviceName: string) => void;
   onOpenServicePage?: (serviceId: string) => void;
+  initialLoading?: boolean;
 }
 
 export const ServicesExplorer: React.FC<ServicesExplorerProps> = ({ 
   onSelectForQuote, 
   onBookService,
-  onOpenServicePage
+  onOpenServicePage,
+  initialLoading = true
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>('all');
   const [activeModalService, setActiveModalService] = useState<ServiceDetail | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(initialLoading);
   const { formatPrice } = useCurrency();
+  const { t } = useLanguage();
+
+  // Initial smooth mount skeleton
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Filter transition effect
+  const handleCategorySelect = (catId: ServiceCategory) => {
+    if (catId === selectedCategory) return;
+    setIsLoading(true);
+    setSelectedCategory(catId);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 280);
+  };
+
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    if (!isLoading) {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 200);
+    }
+  };
 
   const getServiceIcon = (iconName: string) => {
     switch (iconName) {
@@ -61,13 +95,13 @@ export const ServicesExplorer: React.FC<ServicesExplorerProps> = ({
         {/* Section Header */}
         <div className="max-w-3xl mb-12">
           <div className="text-xs font-mono text-cyan-400 tracking-wider mb-2">
-            COMPLETE DIGITAL SOLUTIONS · SERVICES CATALOG
+            {t('services.kicker')}
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-            Everything your business needs to excel online.
+            {t('services.title')}
           </h2>
           <p className="text-base sm:text-lg text-slate-300">
-            From bespoke software engineering and high-converting e-commerce to local SEO dominance and WhatsApp marketing automation. Explore our end-to-end capabilities.
+            {t('services.subtitle')}
           </p>
         </div>
 
@@ -79,8 +113,8 @@ export const ServicesExplorer: React.FC<ServicesExplorerProps> = ({
             {CATEGORIES_CONFIG.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat.id as ServiceCategory)}
-                className={`px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
+                onClick={() => handleCategorySelect(cat.id as ServiceCategory)}
+                className={`px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer ${
                   selectedCategory === cat.id
                     ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                     : 'text-slate-400 hover:text-slate-200'
@@ -97,20 +131,23 @@ export const ServicesExplorer: React.FC<ServicesExplorerProps> = ({
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search services or tech (e.g. M-Pesa, SEO)..."
+              onChange={(e) => handleSearchChange(e.target.value)}
+              placeholder={t('services.searchPlaceholder')}
               className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
             />
           </div>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredServices.map((service) => (
-            <div
-              key={service.id}
-              className="group bg-slate-900/70 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 rounded-2xl p-6 transition-all duration-200 flex flex-col justify-between"
-            >
+        {/* Services Grid with Loading Skeleton */}
+        {isLoading ? (
+          <ServicesGridSkeleton count={6} />
+        ) : filteredServices.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-200">
+            {filteredServices.map((service) => (
+              <div
+                key={service.id}
+                className="group bg-slate-900/70 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 rounded-2xl p-6 transition-all duration-200 flex flex-col justify-between"
+              >
               <div>
                 {/* Header with Icon and Quiet Category Kicker */}
                 <div className="flex items-start justify-between gap-3 mb-4">
@@ -168,7 +205,7 @@ export const ServicesExplorer: React.FC<ServicesExplorerProps> = ({
               <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
                 <div>
                   <span className="text-[10px] text-slate-400 uppercase font-mono block">
-                    Starting from
+                    {t('services.from')}
                   </span>
                   <span className="text-base font-bold text-white font-mono">
                     {formatPrice(service.basePriceUSD, service.basePriceKES)}
@@ -179,33 +216,32 @@ export const ServicesExplorer: React.FC<ServicesExplorerProps> = ({
                   {onOpenServicePage && (
                     <button
                       onClick={() => onOpenServicePage(service.id)}
-                      className="px-2.5 py-1.5 text-xs text-cyan-300 hover:text-white bg-cyan-950/70 hover:bg-cyan-900 border border-cyan-800/60 rounded-lg transition-colors font-semibold flex items-center gap-1"
+                      className="px-2.5 py-1.5 text-xs text-cyan-300 hover:text-white bg-cyan-950/70 hover:bg-cyan-900 border border-cyan-800/60 rounded-lg transition-colors font-semibold flex items-center gap-1 cursor-pointer"
                       title="Open dedicated service page with package tiers and scope"
                     >
-                      <span>Page</span>
+                      <span>{t('services.details')}</span>
                       <ArrowRight className="w-3 h-3" />
                     </button>
                   )}
                   <button
                     onClick={() => setActiveModalService(service)}
-                    className="px-2 py-1.5 text-xs text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors font-medium"
+                    className="px-2 py-1.5 text-xs text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors font-medium cursor-pointer"
                     title="View deliverables and scope"
                   >
                     Quick View
                   </button>
                   <button
                     onClick={() => onSelectForQuote(service.id)}
-                    className="px-3 py-1.5 text-xs text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 rounded-lg font-medium shadow-sm transition-all"
+                    className="px-3 py-1.5 text-xs text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 rounded-lg font-medium shadow-sm transition-all cursor-pointer"
                   >
-                    Quote
+                    {t('services.quote')}
                   </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
-
-        {filteredServices.length === 0 && (
+        ) : (
           <div className="text-center py-16 bg-slate-900/30 rounded-2xl border border-slate-800">
             <p className="text-slate-400 text-sm">No services matched your search query.</p>
             <button

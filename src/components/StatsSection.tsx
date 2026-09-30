@@ -1,10 +1,11 @@
 import React from 'react';
 import { 
   Award, TrendingUp, Users, CheckCircle, ShieldCheck, 
-  Zap, Clock, Server, ArrowUpRight, Sparkles, Building2
+  Gauge, Clock, Server, ArrowUpRight, Building2
 } from 'lucide-react';
 import { AnimatedCounter } from './AnimatedCounter';
 import { useCurrency } from '../context/CurrencyContext';
+import { useLanguage } from '../context/LanguageContext';
 
 interface StatsSectionProps {
   onNavigateToCaseStudies?: () => void;
@@ -16,6 +17,7 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
   onNavigateToBooking 
 }) => {
   const { currency } = useCurrency();
+  const { t } = useLanguage();
 
   return (
     <section id="about" className="py-16 sm:py-20 bg-slate-950 border-y border-slate-900/90 relative overflow-hidden scroll-mt-24">
@@ -30,13 +32,13 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
           <div className="max-w-3xl">
             <div className="text-xs font-mono text-cyan-400 tracking-wider mb-2 uppercase flex items-center gap-2">
               <Award className="w-3.5 h-3.5 text-cyan-400" />
-              <span>About Domain Tech Hub · Verified Track Record & Impact</span>
+              <span>{t('about.kicker')}</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight mb-3">
-              Built on proven performance, uptime & tangible client revenue.
+              {t('about.title')}
             </h2>
             <p className="text-base text-slate-300">
-              We judge our engineering not by lines of code, but by conversion velocity, top Google rankings, and financial scale achieved by African enterprises.
+              {t('about.subtitle')}
             </p>
           </div>
 
@@ -44,9 +46,9 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
             {onNavigateToCaseStudies && (
               <button
                 onClick={onNavigateToCaseStudies}
-                className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-cyan-300 text-xs font-mono flex items-center gap-1.5 transition-colors"
+                className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-cyan-300 text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
               >
-                <span>View Case Studies</span>
+                <span>{t('about.btnCases')}</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
             )}
@@ -163,7 +165,7 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
 
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
-              <Zap className="w-4 h-4" />
+              <Gauge className="w-4 h-4" />
             </div>
             <div>
               <div className="text-base font-extrabold text-white font-mono flex items-center">

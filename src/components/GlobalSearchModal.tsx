@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Search, X, Globe, ShoppingCart, Zap, Database, 
+  Search, X, Globe, ShoppingCart, Database, 
   ArrowRight, FolderGit2, BookOpen, Calculator, Server,
-  Sparkles, Layers, Tag
+  Layers, Tag, Gauge
 } from 'lucide-react';
 import { SERVICES_LIST } from '../data/servicesData';
 import { CASE_STUDIES } from '../data/portfolioData';
@@ -188,7 +188,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
       case 'tool':
         return {
           badge: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800',
-          icon: Zap,
+          icon: Gauge,
           iconBg: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300',
         };
     }

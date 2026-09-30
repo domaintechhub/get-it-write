@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronRight, ArrowLeft, Home, Sparkles } from 'lucide-react';
+import { ChevronRight, ArrowLeft, Home } from 'lucide-react';
 
 interface PageHeaderProps {
   badge: string;
@@ -59,8 +59,8 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         {/* Header Content */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950/80 border border-teal-200/90 dark:border-teal-800/80 text-teal-800 dark:text-teal-300 text-xs font-mono uppercase tracking-wider mb-4 shadow-2xs font-semibold">
-              {badgeIcon || <Sparkles className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />}
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-teal-700 dark:text-teal-400 font-semibold mb-3">
+              {badgeIcon && <span className="shrink-0">{badgeIcon}</span>}
               <span>{badge}</span>
             </div>
 

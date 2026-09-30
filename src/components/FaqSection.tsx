@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { 
   ChevronDown, Search, HelpCircle, MessageSquare, 
-  ArrowRight, Check, Sparkles, Plus, Minus 
+  ArrowRight, Check, Plus, Minus 
 } from 'lucide-react';
 import { FAQ_ITEMS, FAQ_CATEGORIES, FaqItem } from '../data/faqData';
 import { AGENCY_INFO } from '../data/portfolioData';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FaqSectionProps {
   onScheduleCall: () => void;
@@ -14,6 +15,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onScheduleCall }) => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [expandedIds, setExpandedIds] = useState<string[]>(['engagement-payments', 'mpesa-integration']);
+  const { t } = useLanguage();
 
   const toggleItem = (id: string) => {
     setExpandedIds(prev => 
@@ -49,13 +51,13 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onScheduleCall }) => {
         {/* Section Header */}
         <div className="max-w-3xl mb-12">
           <div className="text-xs font-mono text-cyan-400 tracking-wider mb-2">
-            CLIENT QUESTIONS · TRANSPARENT ANSWERS
+            {t('faq.kicker')}
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-            Frequently Asked Questions
+            {t('faq.title')}
           </h2>
           <p className="text-base sm:text-lg text-slate-300">
-            Have questions about M-Pesa integrations, development timelines, SEO guarantees, or source code ownership? Find straightforward answers below before booking your strategy session.
+            {t('faq.subtitle')}
           </p>
         </div>
 
@@ -94,9 +96,9 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onScheduleCall }) => {
 
             <button
               onClick={expandedIds.length > 0 ? handleCollapseAll : handleExpandAll}
-              className="px-3 py-2 text-xs font-mono text-slate-400 hover:text-cyan-300 bg-slate-900 border border-slate-800 rounded-xl whitespace-nowrap transition-colors"
+              className="px-3 py-2 text-xs font-mono text-slate-400 hover:text-cyan-300 bg-slate-900 border border-slate-800 rounded-xl whitespace-nowrap transition-colors cursor-pointer"
             >
-              {expandedIds.length > 0 ? 'Collapse All' : 'Expand All'}
+              {expandedIds.length > 0 ? t('faq.collapseAll') : t('faq.expandAll')}
             </button>
           </div>
         </div>
@@ -185,10 +187,10 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onScheduleCall }) => {
         <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-stone-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="text-lg font-bold text-slate-900 dark:text-white flex items-center justify-center sm:justify-start gap-2">
-              <span>Have a question not listed here?</span>
+              <span>{t('faq.unlistedTitle')}</span>
             </h4>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              Speak directly with our senior engineers and digital architects in Nairobi. Average response under 20 minutes.
+              {t('faq.unlistedSubtitle')}
             </p>
           </div>
 

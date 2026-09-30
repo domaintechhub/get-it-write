@@ -6,13 +6,13 @@
 
 ---
 
-## 🚀 Overview
+## Overview
 
 **Domain Tech Hub** is a modern, high-performance web agency application built with **React 19**, **TypeScript**, **Vite**, and **Tailwind CSS v4**. It features a modern glassmorphism design, real-time client utilities, multi-currency display (USD / KES), multi-language localization (English, Français, Kiswahili), and seamless light/dark mode support.
 
 ---
 
-## ✨ Features
+## Features
 
 - **5 Core Navigation Sections**:
   - **Services**: Web applications, e-commerce, SEO & speed optimization, custom CRM, and cloud DevOps.
@@ -35,7 +35,7 @@
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 ├── public/                 # Static assets, logos, and server rewrite configs
@@ -77,7 +77,7 @@
 
 ---
 
-## 🛠️ Quick Start
+## Quick Start
 
 ### 1. Prerequisites
 - **Node.js**: `>=18.0.0` (LTS 18, 20, or 22 recommended)
@@ -109,7 +109,7 @@ npm start
 
 ---
 
-## 🚢 Deployment Guide
+## Deployment Guide
 
 ### Deploy to Vercel
 1. Push this repository to GitHub or GitLab.
@@ -135,6 +135,6 @@ npm run deploy
 
 ---
 
-## 📄 License
+## License
 
 Apache-2.0 © Domain Tech Hub. All rights reserved.

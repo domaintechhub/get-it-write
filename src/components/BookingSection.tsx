@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Calendar, Clock, Video, Phone, MapPin, CheckCircle2, 
-  Send, MessageSquare, Download, Sparkles, Mail, User, ShieldCheck, X 
+  Send, MessageSquare, Download, Check, Mail, User, ShieldCheck, X 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AGENCY_INFO } from '../data/portfolioData';
+import { useLanguage } from '../context/LanguageContext';
 
 interface BookingSectionProps {
   prefilledService?: string;
@@ -15,6 +16,7 @@ export const BookingSection: React.FC<BookingSectionProps> = ({
   prefilledService, 
   prefilledNotes 
 }) => {
+  const { t } = useLanguage();
   const [meetingType, setMeetingType] = useState<'google_meet' | 'phone' | 'nairobi_office'>('google_meet');
   const [selectedDate, setSelectedDate] = useState(() => {
     const d = new Date();
@@ -106,13 +108,13 @@ Looking forward to discussing my project!`;
         {/* Section Header */}
         <div className="max-w-3xl mb-12">
           <div className="text-xs font-mono text-cyan-400 tracking-wider mb-2">
-            DIRECT ENGAGEMENT · SCHEDULE A STRATEGY SESSION
+            {t('contact.kicker')}
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-            Let's build something exceptional together.
+            {t('contact.title')}
           </h2>
           <p className="text-base sm:text-lg text-slate-300">
-            Book a complimentary 30-minute discovery session with our senior digital strategists. We will review your goals, recommend architectures, and outline estimated budgets.
+            {t('contact.subtitle')}
           </p>
         </div>
 
@@ -254,7 +256,7 @@ Looking forward to discussing my project!`;
                     transition={{ delay: 0.2, duration: 0.4 }}
                   >
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-800 text-emerald-300 text-xs font-mono mb-2">
-                      <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
                       <span>Request Successfully Received</span>
                     </div>
 
@@ -465,10 +467,10 @@ Looking forward to discussing my project!`;
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 transition-all"
+                  className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 transition-all cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
-                  <span>Confirm Strategy Consultation</span>
+                  <span>{t('contact.btnSubmit')}</span>
                 </button>
 
               </motion.form>

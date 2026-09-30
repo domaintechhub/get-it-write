@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Calculator, Check, ArrowRight, Copy, CheckCheck, 
-  MessageSquare, Sparkles, Shield, Clock, RefreshCw 
+  MessageSquare, Shield, Clock, RefreshCw 
 } from 'lucide-react';
 import { SERVICES_LIST } from '../data/servicesData';
 import { useCurrency } from '../context/CurrencyContext';
+import { useLanguage } from '../context/LanguageContext';
 
 interface AddonOption {
   id: string;
@@ -76,6 +77,7 @@ export const CostCalculator: React.FC<CostCalculatorProps> = ({
   onProceedToBooking 
 }) => {
   const { currency, formatPrice } = useCurrency();
+  const { t } = useLanguage();
   const [selectedServiceId, setSelectedServiceId] = useState<string>(
     initialServiceId || 'web-development'
   );
@@ -181,13 +183,13 @@ Generated at domaintechhub.com tool.`;
         {/* Section Header */}
         <div className="max-w-3xl mb-12">
           <div className="text-xs font-mono text-cyan-400 tracking-wider mb-2">
-            TRANSPARENT PRICING · INSTANT ESTIMATOR
+            {t('calc.kicker')}
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-            Interactive Project Cost Calculator
+            {t('calc.title')}
           </h2>
           <p className="text-base sm:text-lg text-slate-300">
-            Configure your technical scope, select tailored integrations (M-Pesa, WhatsApp, AI, SEO), and receive an instant transparent project quotation with zero surprises.
+            {t('calc.subtitle')}
           </p>
         </div>
 
@@ -199,7 +201,7 @@ Generated at domaintechhub.com tool.`;
             {/* Step 1: Select Primary Service */}
             <div>
               <label className="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">
-                1. Select Primary Service
+                {t('calc.step1')}
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {SERVICES_LIST.slice(0, 8).map((srv) => (
@@ -224,7 +226,7 @@ Generated at domaintechhub.com tool.`;
             {/* Step 2: Project Tier & Scope */}
             <div>
               <label className="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">
-                2. Project Tier & Scale
+                {t('calc.step2')}
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
@@ -275,7 +277,7 @@ Generated at domaintechhub.com tool.`;
             <div>
               <div className="flex items-center justify-between mb-3">
                 <label className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                  3. Tailored Add-Ons & Technical Modules
+                  {t('calc.step3')}
                 </label>
                 <span className="text-xs text-slate-400">
                   {selectedAddons.length} selected
@@ -324,7 +326,7 @@ Generated at domaintechhub.com tool.`;
             {/* Step 4: Timeline Priority */}
             <div>
               <label className="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">
-                4. Project Timeline & Delivery Pace
+                {t('calc.step4')}
               </label>
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
@@ -371,11 +373,11 @@ Generated at domaintechhub.com tool.`;
                 <div className="flex items-center gap-2">
                   <Calculator className="w-4 h-4 text-cyan-400" />
                   <span className="font-mono text-xs text-cyan-400 uppercase tracking-wider font-semibold">
-                    Quotation Summary
+                    {t('calc.summaryTitle')}
                   </span>
                 </div>
                 <span className="text-[11px] font-mono text-emerald-400">
-                  Instant Estimate
+                  {t('calc.instantEst')}
                 </span>
               </div>
 
@@ -414,7 +416,7 @@ Generated at domaintechhub.com tool.`;
               {/* Total Display */}
               <div className="py-4">
                 <span className="text-xs text-slate-400 block font-mono uppercase tracking-wider">
-                  Estimated Investment ({currency})
+                  {t('calc.estInvestment')} ({currency})
                 </span>
                 <div className="text-3xl font-extrabold text-white font-mono mt-1 tracking-tight">
                   {formatPrice(finalTotalUSD, finalTotalKES)}
@@ -431,9 +433,9 @@ Generated at domaintechhub.com tool.`;
                     getQuoteSummaryText(), 
                     currency === 'KES' ? `KSh ${finalTotalKES.toLocaleString()}` : `$${finalTotalUSD.toLocaleString()}`
                   )}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 transition-all hover:scale-[1.01]"
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 transition-all hover:scale-[1.01] cursor-pointer"
                 >
-                  <span>Book Strategy & Lock Quote</span>
+                  <span>{t('calc.btnLock')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
@@ -441,25 +443,25 @@ Generated at domaintechhub.com tool.`;
                   href={`https://wa.me/254118746676?text=${encodeURIComponent(getQuoteSummaryText())}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/80 border border-emerald-800 text-emerald-300 font-semibold text-xs flex items-center justify-center gap-2 transition-colors text-center"
+                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/80 border border-emerald-800 text-emerald-300 font-semibold text-xs flex items-center justify-center gap-2 transition-colors text-center cursor-pointer"
                 >
                   <MessageSquare className="w-4 h-4 text-emerald-400" />
-                  <span>Send Quote to DTH WhatsApp</span>
+                  <span>{t('calc.btnSendWA')}</span>
                 </a>
 
                 <button
                   onClick={handleCopyQuote}
-                  className="w-full py-2 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs flex items-center justify-center gap-2 transition-colors"
+                  className="w-full py-2 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   {copied ? (
                     <>
                       <CheckCheck className="w-3.5 h-3.5 text-emerald-400" />
-                      <span className="text-emerald-400">Quote Copied to Clipboard</span>
+                      <span className="text-emerald-400">{t('calc.copied')}</span>
                     </>
                   ) : (
                     <>
                       <Copy className="w-3.5 h-3.5 text-slate-400" />
-                      <span>Copy Full Quote Breakdown</span>
+                      <span>{t('calc.btnCopy')}</span>
                     </>
                   )}
                 </button>

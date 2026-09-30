@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Search, ShieldAlert, CheckCircle2, AlertTriangle, XCircle, 
-  Zap, ArrowRight, Printer, RefreshCw, Globe, Smartphone, Lock
+  Gauge, ArrowRight, Printer, RefreshCw, Globe, Smartphone, Lock
 } from 'lucide-react';
 import { AuditReport } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 interface SeoAuditToolProps {
   onFixWithAgency: (domain: string, auditIssuesCount: number) => void;
 }
 
 export const SeoAuditTool: React.FC<SeoAuditToolProps> = ({ onFixWithAgency }) => {
+  const { t } = useLanguage();
   const [urlInput, setUrlInput] = useState('');
   const [keywordInput, setKeywordInput] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -151,13 +153,13 @@ export const SeoAuditTool: React.FC<SeoAuditToolProps> = ({ onFixWithAgency }) =
         {/* Section Header */}
         <div className="max-w-3xl mb-12">
           <div className="text-xs font-mono text-cyan-400 tracking-wider mb-2">
-            DIAGNOSTIC UTILITY · 100% FREE
+            {t('audit.kicker')}
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-            Instant Website & SEO Health Audit Scanner
+            {t('audit.title')}
           </h2>
           <p className="text-base sm:text-lg text-slate-300">
-            Uncover why your website might be losing customers to competitors. Run our deep diagnostic scanner to test Core Web Vitals, on-page SEO, mobile responsiveness, and security.
+            {t('audit.subtitle')}
           </p>
         </div>
 
@@ -168,7 +170,7 @@ export const SeoAuditTool: React.FC<SeoAuditToolProps> = ({ onFixWithAgency }) =
               
               <div className="md:col-span-7">
                 <label className="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
-                  Website URL / Domain Name
+                  {t('audit.urlLabel')}
                 </label>
                 <div className="relative">
                   <Globe className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -185,7 +187,7 @@ export const SeoAuditTool: React.FC<SeoAuditToolProps> = ({ onFixWithAgency }) =
 
               <div className="md:col-span-5">
                 <label className="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
-                  Target Search Keyword (Optional)
+                  {t('audit.keywordLabel')}
                 </label>
                 <div className="relative">
                   <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -210,16 +212,16 @@ export const SeoAuditTool: React.FC<SeoAuditToolProps> = ({ onFixWithAgency }) =
               <button
                 type="submit"
                 disabled={isAnalyzing}
-                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 transition-all disabled:opacity-50"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 transition-all disabled:opacity-50 cursor-pointer"
               >
                 {isAnalyzing ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin text-white" />
-                    <span>Analyzing Site Architecture...</span>
+                    <span>{t('audit.analyzing')}</span>
                   </>
                 ) : (
                   <>
-                    <span>Generate Free Audit Report</span>
+                    <span>{t('audit.btnRun')}</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
@@ -307,7 +309,7 @@ export const SeoAuditTool: React.FC<SeoAuditToolProps> = ({ onFixWithAgency }) =
               <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-mono text-slate-400 uppercase">Load Speed</span>
-                  <Zap className="w-4 h-4 text-amber-400" />
+                  <Gauge className="w-4 h-4 text-teal-400" />
                 </div>
                 <span className="text-2xl font-bold font-mono text-white mt-1 block">
                   {(report.loadingTimeMs / 1000).toFixed(1)}s

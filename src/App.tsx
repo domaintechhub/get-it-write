@@ -30,7 +30,7 @@ import { QuickContactFloating } from './components/QuickContactFloating';
 import { applyPageSeo } from './utils/seo';
 import { SERVICES_LIST } from './data/servicesData';
 import { 
-  ArrowRight, Sparkles, ShieldCheck, Zap, 
+  ArrowRight, ShieldCheck, 
   CheckCircle, MessageSquare, PhoneCall, Code, Layers 
 } from 'lucide-react';
 import { AGENCY_INFO } from './data/portfolioData';
@@ -457,7 +457,6 @@ export default function App() {
               <div className="animate-in fade-in duration-200">
                 <PageHeader
                   badge="Engineering Insights & Digital Trends"
-                  badgeIcon={<Sparkles className="w-3.5 h-3.5 text-amber-500" />}
                   title="African Digital Scale, Fintech & High-Performance Software"
                   description="Practical architectural teardowns, conversion optimization playbooks, and regional market insights authored by Domain Tech Hub engineers in Nairobi. Every article includes verified reading time estimates."
                   currentBreadcrumb="Engineering Insights"
