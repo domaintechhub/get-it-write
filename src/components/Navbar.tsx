@@ -573,6 +573,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                         </div>
                       </button>
 
+                      {/* Our Engineering Team */}
+                      <button
+                        onClick={() => handleNavClick('team')}
+                        className="w-full text-left p-2.5 rounded-2xl hover:bg-stone-50 dark:hover:bg-slate-900 transition-colors group flex items-start gap-3 cursor-pointer"
+                      >
+                        <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform">
+                          <Users className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">
+                            Our Engineering Team
+                          </div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+                            Meet our senior architects, designers & fintech leads
+                          </div>
+                        </div>
+                      </button>
+
                       {/* Direct WhatsApp Line */}
                       <div className="pt-2 border-t border-stone-200/80 dark:border-slate-800/60 flex items-center justify-between px-2.5 py-1 text-[11px]">
                         <a
@@ -717,6 +735,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {[
+                    { id: 'team', label: 'Our Engineering Team', subtitle: 'Senior Architects & Strategists', icon: Users, active: false },
                     { id: 'tech-stack', label: t('nav.techStack'), subtitle: 'React, Node, Python & Cloud Architecture', icon: Cpu, active: isTechStackActive },
                     { id: 'insights', label: t('nav.insights'), subtitle: 'Tech Trends & Strategy Guides', icon: BookOpen, active: isInsightsActive },
                     { id: 'client-portal', label: t('nav.clientPortal'), subtitle: 'Client Project Dashboard Demo', icon: ShieldCheck, active: isPortalActive },

@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
   return {
-    base: process.env.VITE_BASE_URL || (mode === 'development' ? '/' : '/get-it-write/'),
+    base: '/',
     plugins: [
       react(), 
       tailwindcss()

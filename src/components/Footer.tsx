@@ -140,6 +140,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </h4>
             <ul className="space-y-2.5">
               <li>
+                <button onClick={() => onNavigate('team')} className="hover:text-cyan-300 text-left transition-colors flex items-center gap-1 font-medium text-white">
+                  <span>Our Engineering Team</span>
+                  <ArrowUpRight className="w-3 h-3 text-cyan-400" />
+                </button>
+              </li>
+              <li>
                 <button onClick={() => onNavigate('tech-stack')} className="hover:text-cyan-300 text-left transition-colors flex items-center gap-1">
                   <span>Our Tech Stack</span>
                   <ArrowUpRight className="w-3 h-3 text-cyan-400" />

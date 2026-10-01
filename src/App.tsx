@@ -19,6 +19,7 @@ import { DomainChecker } from './components/DomainChecker';
 import { Portfolio } from './components/Portfolio';
 import { ClientPortalDemo } from './components/ClientPortalDemo';
 import { Testimonials } from './components/Testimonials';
+import { TeamSection } from './components/TeamSection';
 import { InsightsSection } from './components/InsightsSection';
 import { FaqSection } from './components/FaqSection';
 import { BookingSection } from './components/BookingSection';
@@ -108,6 +109,10 @@ export default function App() {
         setTimeout(() => {
           document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
         }, 150);
+      } else if (rawHash === 'team' || rawHash === 'our-team') {
+        setTimeout(() => {
+          document.getElementById('team')?.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
       } else {
         window.scrollTo({ top: 0, behavior: 'instant' });
       }
@@ -136,6 +141,14 @@ export default function App() {
       window.location.hash = '#/about';
       setTimeout(() => {
         document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return;
+    } else if (target === 'team' || target === 'our-team') {
+      setCurrentPage('home');
+      setActiveServiceId(null);
+      window.location.hash = '#/team';
+      setTimeout(() => {
+        document.getElementById('team')?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
       return;
     } else if (target === 'services' || target === 'tech-stack') {
@@ -239,6 +252,12 @@ export default function App() {
     navigateTo('contact');
   };
 
+  const handleScheduleWithTeamMember = (memberName: string, role: string) => {
+    setPrefilledService(`Technical Consultation: ${memberName} (${role})`);
+    setPrefilledNotes(`I would like to schedule a technical discovery session with ${memberName} (${role}) to discuss our software architecture.`);
+    navigateTo('contact');
+  };
+
   return (
     <ThemeProvider>
       <CurrencyProvider>
@@ -296,6 +315,10 @@ export default function App() {
                 <ClientPortalDemo />
 
                 <Testimonials />
+
+                <TeamSection 
+                  onScheduleWithMember={handleScheduleWithTeamMember}
+                />
 
                 <InsightsSection 
                   onScheduleConsultation={handleScheduleFromInsight}
